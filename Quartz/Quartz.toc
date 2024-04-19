@@ -1,6 +1,6 @@
 ## Title: Quartz
 ## Interface: 30300
-## Notes: |@Version: 1@|Modular casting bar.
+## Notes: |@Version: 2@|Modular casting bar.
 ## Author: Nevcairiel, Nymbia
 ## Version: 3.0.3.1
 ## X-License: GPL v2
