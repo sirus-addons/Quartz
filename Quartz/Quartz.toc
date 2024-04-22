@@ -11,10 +11,10 @@
 ## X-Curse-Repository-ID: wow/quartz/mainline
 
 ## Title-ruRU: Кварц
-## Notes-ruRU: |@Version: 1@|Модульная полоса применений.
-## Notes-frFR: |@Version: 1@|Barres d'incantation modulaires.
-## Notes-zhCN: |@Version: 1@|模块化施法条。
-## Notes-zhTW: |@Version: 1@|模組化施法條。
+## Notes-ruRU: |@Version: 2@|Модульная полоса применений.
+## Notes-frFR: |@Version: 2@|Barres d'incantation modulaires.
+## Notes-zhCN: |@Version: 2@|模块化施法条。
+## Notes-zhTW: |@Version: 2@|模組化施法條。
 
 ## SavedVariables: Quartz3DB
 ## OptionalDeps: Ace3, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets, SharedMedia, FlightMap
