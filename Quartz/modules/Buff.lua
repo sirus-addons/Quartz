@@ -778,7 +778,8 @@ function Buff:OnInitialize()
 end
 
 function Buff:OnEnable()
-	self:RegisterBucketEvent("UNIT_AURA", 0.5)
+	-- Не копить UNIT_AURA по 0,5 с: в рейде событие идёт непрерывно, и полоски цели появляются с задержкой.
+	self:RegisterEvent("UNIT_AURA")
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", "UpdateBars")
 	self:RegisterEvent("PLAYER_FOCUS_CHANGED", "UpdateBars")
 	media.RegisterCallback(self, "LibSharedMedia_SetGlobal", function(mtype, override)
@@ -827,14 +828,12 @@ function Buff:OnDisable()
 	media.UnregisterCallback(self, "LibSharedMedia_Registered")
 end
 
-function Buff:UNIT_AURA(units)
-	for unit in pairs(units) do
-		if unit == "target" then
-			self:UpdateTargetBars()
-		end
-		if unit == "focus" or UnitIsUnit("focus", unit) then
-			self:UpdateFocusBars()
-		end
+function Buff:UNIT_AURA(event, unit)
+	if unit == "target" then
+		self:UpdateTargetBars()
+	end
+	if unit == "focus" or (unit and UnitIsUnit("focus", unit)) then
+		self:UpdateFocusBars()
 	end
 end
 
@@ -894,7 +893,7 @@ do
 				tmp[k] = del(tmp[k])
 			end
 			if db.targetbuffs then
-				for i = 1, 32 do
+				for i = 1, 255 do
 					local name, rank, texture, applications, _, duration, expirationTime, caster = UnitBuff("target", i)
 					local remaining = expirationTime and (expirationTime - GetTime()) or nil
 					if not name then
@@ -913,7 +912,7 @@ do
 				end
 			end
 			if db.targetdebuffs then
-				for i = 1, 40 do
+				for i = 1, 255 do
 					local name, rank, texture, applications, dispeltype, duration, expirationTime, caster = UnitDebuff("target", i)
 					local remaining =  expirationTime and (expirationTime - GetTime()) or nil
 					if not name then
@@ -1002,7 +1001,7 @@ do
 				tmp[k] = del(tmp[k])
 			end
 			if db.focusbuffs then
-				for i = 1, 32 do
+				for i = 1, 255 do
 					local name, rank, texture, applications, dispeltype, duration, expirationTime, caster = UnitBuff("focus", i)
 					local remaining =  expirationTime and (expirationTime - GetTime()) or nil
 					if not name then
@@ -1021,7 +1020,7 @@ do
 				end
 			end
 			if db.focusdebuffs then
-				for i = 1, 40 do
+				for i = 1, 255 do
 					local name, rank, texture, applications, dispeltype, duration, expirationTime, caster = UnitDebuff("focus", i)
 					local remaining =  expirationTime and (expirationTime - GetTime()) or nil
 					if not name then

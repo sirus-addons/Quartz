@@ -146,10 +146,20 @@ function Swing:OnDisable()
 end
 
 function Swing:PLAYER_ENTER_COMBAT()
-	local _,_,offhandlow, offhandhigh = UnitDamage("player")
-	if math_abs(offhandlow - offhandhigh) <= 0.1 or playerclass == "DRUID" then
-		swingmode = 0 -- shouldn"t be dual-wielding
+	if swingmode == 1 then
+		return
 	end
+	swingmode = 0
+end
+
+function Swing:IsOffhandSwing()
+	local mainSpeed, offSpeed = UnitAttackSpeed("player")
+	if not offSpeed or offSpeed == 0 or not starttime or not mainSpeed or mainSpeed == 0 then
+		return false
+	end
+	-- A parry brings the next main-hand swing forward to about 60% of the swing timer.
+	-- An equal-speed off-hand lands earlier than that and must not restart the bar.
+	return (GetTime() - starttime) < (mainSpeed * 0.58)
 end
 
 function Swing:PLAYER_LEAVE_COMBAT()
@@ -177,7 +187,7 @@ do
 		elseif (combatevent == "SWING_DAMAGE" or combatevent == "SWING_MISSED") and (bit_band(srcFlags, COMBATLOG_FILTER_ME) == COMBATLOG_FILTER_ME) then
 			if swordspecproc then
 				swordspecproc = false
-			else
+			elseif not self:IsOffhandSwing() then
 				self:MeleeSwing()
 			end
 		elseif (combatevent == "SWING_MISSED") and (bit_band(dstFlags, COMBATLOG_FILTER_ME) == COMBATLOG_FILTER_ME) and spellID == "PARRY" and duration then
